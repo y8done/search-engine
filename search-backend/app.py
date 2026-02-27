@@ -3,13 +3,16 @@ import math
 import string
 from collections import defaultdict
 import nltk
+import os
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
@@ -67,18 +70,19 @@ def api_search():
     ranked_results = search(user_query)
 
     formatted_results = []
-    for url, score in ranked_results[:10]: # Return top 10 results
+    for url, score in ranked_results[:10]:
         formatted_results.append({
             "url": url,
             "score": round(score, 4)
         })
         
-    # Send it back as JSON!
+
     return jsonify({"query": user_query, "results": formatted_results})
 
+
 if __name__ == '__main__':
-    print("Starting Search API on http://localhost:5000...")
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 

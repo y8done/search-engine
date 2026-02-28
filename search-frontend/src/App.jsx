@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import './App.css'
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 function App() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -12,7 +15,7 @@ function App() {
     setIsSearching(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`${BACKEND_URL}/search?query=${encodeURIComponent(query)}`);
       const data = await response.json();
       setResults(data.results);
     } catch (error) {
